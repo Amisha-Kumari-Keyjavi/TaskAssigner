@@ -73,6 +73,25 @@ app.get('/groups/:id', (req, res) => {
     });
 });
 
+app.delete('/groups', (req, res) => {
+    const {groupId } = req.body;
+    
+    if (!groupId) {
+        return res.status(400).json({ message: "Groups ID is required in the request body" });
+    }
+
+    db.query('DELETE FROM groupss WHERE groupId = ?', [groupId], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: err.message });
+        }
+
+        if(result.affectedRows === 0) {
+            return res.status(404).json({ message: "Groups not found" });
+        }
+        res.json({ message: 'Groups deleted successfully' });
+    });
+});
 
 // CRUD API for Tasks
 app.post('/tasks', (req, res) => {
@@ -92,6 +111,27 @@ app.get('/tasks/:id', (req, res) => {
     });
 });
 
+app.delete('/tasks', (req, res) => {
+    const {task_id} = req.body;
+    
+    if (!task_id) {
+        return res.status(400).json({ message: "task ID is required in the request body" });
+    }
+
+    db.query('DELETE FROM tasks WHERE task_id = ?', [task_id], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: err.message });
+        }
+
+        if(result.affectedRows === 0) {
+            return res.status(404).json({ message: "Tasks not found" });
+        }
+        res.json({ message: 'Task deleted successfully' });
+    });
+});
+
+
 //api for projects
 
 app.post('/projects', (req, res) => {
@@ -110,13 +150,26 @@ app.get('/projects', (req, res) => {
     });
 });
 
+app.delete('/projects', (req, res) => {
+    const { project_id } = req.body;
+    
+    if (!project_id) {
+        return res.status(400).json({ message: "Project ID is required in the request body" });
+    }
 
-app.delete('/projects/:id', (req, res) => {
-    db.query('DELETE FROM Projects WHERE project_id=?', [req.params.id], (err) => {
-        if (err) return res.status(500).send(err);
-        res.send({ message: 'Project deleted' });
+    db.query('DELETE FROM projects WHERE project_id = ?', [project_id], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: err.message });
+        }
+
+        if(result.affectedRows === 0) {
+            return res.status(404).json({ message: "Topic not found" });
+        }
+        res.json({ message: 'Project deleted successfully' });
     });
 });
+
 //crud api for topics
 
 app.post('/topics', (req, res) => {
@@ -135,10 +188,23 @@ app.get('/topics', (req, res) => {
     });
 });
 
-app.delete('/topics/:id', (req, res) => {
-    db.query('DELETE FROM Topics WHERE topicId=?', [req.params.id], (err) => {
-        if (err) return res.status(500).send(err);
-        res.send({ message: 'Topic deleted' });
+app.delete('/topics', (req, res) => {
+    const { topicId } = req.body;
+    
+    if (!topicId) {
+        return res.status(400).json({ message: "Topic ID is required in the request body" });
+    }
+
+    db.query('DELETE FROM Topics WHERE topicId = ?', [topicId], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: err.message });
+        }
+
+        if(result.affectedRows === 0) {
+            return res.status(404).json({ message: "Topic not found" });
+        }
+        res.json({ message: 'Topic deleted successfully' });
     });
 });
 
@@ -157,6 +223,27 @@ app.get('/organizations', (req, res) => {
     db.query('SELECT * FROM organizations', (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
+    });
+});
+
+
+app.delete('/organizations', (req, res) => {
+    const {organization_id} = req.body;
+    
+    if (!organization_id) {
+        return res.status(400).json({ message: "Organisation ID is required in the request body" });
+    }
+
+    db.query('DELETE FROM organization_details WHERE organization_id = ?', [organization_id], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: err.message });
+        }
+
+        if(result.affectedRows === 0) {
+            return res.status(404).json({ message: "Organisation not found" });
+        }
+        res.json({ message: 'Organisation deleted successfully' });
     });
 });
 
